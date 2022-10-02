@@ -1,0 +1,17 @@
+{
+    "name": "GeoGuesser Location Finder",
+    "description": "Console logs the location and coords of the current geoguesser round in the extensions console",
+    "version": "1.0",
+    "manifest_version": 3,
+    "background": {
+      "service_worker": "background.js"
+    },
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "permissions": [
+      "webRequest",
+      "notifications",
+      "webRequest"
+    ]
+  }
