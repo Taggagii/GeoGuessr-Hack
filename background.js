@@ -6,20 +6,19 @@ chrome.webRequest.onCompleted.addListener(async (request) => {
     await fetch(request.url).then((response) => {
         return response.text();
     }).then((data) => {
-        const parsedData = JSON.parse(data.match(/(?<=\().*(?=\))/)[0])[1][0];
-        try {
-            if (parsedData.length !== 13) {
-                return
-            }
-            const locationList = parsedData[3][2];
-            const location = locationList[0][0] + locationList[1][0];
-            const coordValue = parsedData[5][0][1][0];
-            const lat = coordValue[2];
-            const long = coordValue[3];
-            console.log(lat, long);
-            console.log(location);
-        } catch (err) {
-            console.log(parsedData);
+        // console.log(data);
+        let coordHolder = JSON.parse(data.match(/\[null,null,-?\d*.\d*,-?\d*.\d*\]/)[0]);
+        if (!coordHolder) {
+            chrome.storage.sync.set({coords: JSON.stringify(data[1][0])}, () => {
+                console.log('set value weird');
+            });
+            console.log(data[1][0])
+        } else {
+            let coords = coordHolder.splice(2, 2);
+            chrome.storage.sync.set({coords: JSON.stringify(coords)}, () => {
+                console.log('set value');
+            });
+            console.log(coords);
         }
         console.log('-'.repeat(50));
     });
